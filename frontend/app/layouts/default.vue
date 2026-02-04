@@ -369,7 +369,7 @@ const logout = async () => {
 .main-content {
   background: #f1f5f9;
   min-height: 100vh;
-  padding: 0 !important;
+  padding: 64px 0 0 0 !important; /* Top padding for navbar */
 }
 
 .main-content :deep(.v-main__wrap) {
