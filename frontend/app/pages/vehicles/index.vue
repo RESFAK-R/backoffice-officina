@@ -12,42 +12,48 @@
     </div>
 
     <!-- Filters -->
-    <v-card class="mb-6">
-      <v-card-text>
-        <v-row align="center">
+    <v-card class="border-b" flat>
+      <v-card-text class="py-2 px-4">
+        <v-row align="center" no-gutters class="ga-4">
           <v-col cols="12" md="6" lg="4">
             <v-text-field
               v-model="search"
               density="compact"
-              variant="outlined"
+              variant="solo"
+              flat
               placeholder="Cerca per targa, marca, modello, telaio..."
               prepend-inner-icon="mdi-magnify"
               hide-details
               clearable
+              class="border"
             />
           </v-col>
           <v-col cols="12" md="3" lg="2">
             <v-select
               v-model="filterFuel"
               density="compact"
-              variant="outlined"
+              variant="solo"
+              flat
               :items="fuelTypes"
               item-title="title"
               item-value="value"
               label="Alimentazione"
               hide-details
               clearable
+              class="border"
             />
           </v-col>
           <v-col cols="12" md="3" lg="2">
             <v-select
               v-model="filterBrand"
               density="compact"
-              variant="outlined"
+              variant="solo"
+              flat
               :items="availableBrands"
               label="Marca"
               hide-details
               clearable
+              class="border"
             />
           </v-col>
         </v-row>
@@ -197,7 +203,7 @@ const headers = [
   { title: 'Alimentazione', key: 'fuel_type', sortable: true },
   { title: 'Chilometraggio', key: 'mileage', sortable: true },
   { title: 'Scadenza Revisione', key: 'mot_expiry', sortable: true },
-  { title: 'Azioni', key: 'actions', sortable: false, align: 'end' }
+  { title: 'Azioni', key: 'actions', sortable: false, align: 'end' as const }
 ]
 
 // Computed

@@ -12,52 +12,65 @@ export default defineNuxtPlugin((app) => {
                 light: {
                     dark: false,
                     colors: {
-                        primary: '#2563eb',
-                        secondary: '#475569',
-                        accent: '#06b6d4',
-                        error: '#ef4444',
-                        warning: '#f59e0b',
-                        info: '#3b82f6',
-                        success: '#10b981',
-                        background: '#f8fafc',
+                        primary: '#0f172a', // Navy/Dark Slate for a premium look
+                        secondary: '#64748b',
+                        accent: '#334155',
+                        error: '#be123c',
+                        warning: '#d97706',
+                        info: '#0ea5e9',
+                        success: '#059669',
+                        background: '#f1f5f9',
                         surface: '#ffffff'
                     }
                 },
                 dark: {
                     dark: true,
                     colors: {
-                        primary: '#3b82f6',
-                        secondary: '#64748b',
-                        accent: '#06b6d4',
-                        error: '#ef4444',
-                        warning: '#f59e0b',
-                        info: '#3b82f6',
-                        success: '#10b981',
-                        background: '#0f172a',
-                        surface: '#1e293b'
+                        primary: '#f8fafc',
+                        secondary: '#94a3b8',
+                        accent: '#e2e8f0',
+                        error: '#fb7185',
+                        warning: '#fbbf24',
+                        info: '#38bdf8',
+                        success: '#34d399',
+                        background: '#020617',
+                        surface: '#0f172a'
                     }
                 }
             }
         },
         defaults: {
             VCard: {
-                rounded: 'lg',
-                elevation: 2
+                rounded: '0',
+                elevation: 0,
+                border: true
             },
             VBtn: {
-                rounded: 'lg',
-                variant: 'flat'
+                rounded: '0',
+                variant: 'flat',
+                elevation: 0
             },
             VTextField: {
                 variant: 'outlined',
-                density: 'comfortable'
+                density: 'comfortable',
+                rounded: '0'
             },
             VSelect: {
                 variant: 'outlined',
-                density: 'comfortable'
+                density: 'comfortable',
+                rounded: '0'
             },
             VDataTable: {
                 hover: true
+            },
+            VList: {
+                rounded: '0'
+            },
+            VSheet: {
+                rounded: '0'
+            },
+            VAvatar: {
+                rounded: '0'
             }
         }
     })

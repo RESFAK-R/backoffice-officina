@@ -12,7 +12,7 @@
     </div>
 
     <!-- Status Tabs -->
-    <v-card class="mb-6">
+    <v-card class="border-b" flat>
       <v-tabs v-model="activeTab" color="primary" show-arrows>
         <v-tab value="all">
           <v-badge :content="statusCounts.all" color="grey" inline>
@@ -41,28 +41,32 @@
         </v-tab>
       </v-tabs>
 
-      <v-card-text>
-        <v-row align="center">
+      <v-card-text class="py-2 px-4">
+        <v-row align="center" no-gutters class="ga-4">
           <v-col cols="12" md="4">
             <v-text-field
               v-model="search"
               density="compact"
-              variant="outlined"
+              variant="solo"
+              flat
               placeholder="Cerca ordine, targa, cliente..."
               prepend-inner-icon="mdi-magnify"
               hide-details
               clearable
+              class="border"
             />
           </v-col>
           <v-col cols="12" md="3">
             <v-select
               v-model="filterPriority"
               density="compact"
-              variant="outlined"
+              variant="solo"
+              flat
               :items="priorities"
               label="Priorità"
               hide-details
               clearable
+              class="border"
             />
           </v-col>
           <v-col cols="12" md="2">
@@ -70,9 +74,11 @@
               v-model="filterDateFrom"
               type="date"
               density="compact"
-              variant="outlined"
+              variant="solo"
+              flat
               label="Dal"
               hide-details
+              class="border"
             />
           </v-col>
           <v-col cols="12" md="2">
@@ -80,9 +86,11 @@
               v-model="filterDateTo"
               type="date"
               density="compact"
-              variant="outlined"
+              variant="solo"
+              flat
               label="Al"
               hide-details
+              class="border"
             />
           </v-col>
         </v-row>

@@ -209,7 +209,7 @@
       </v-btn>
 
       <!-- User Menu -->
-      <v-btn class="user-menu-btn mr-4" variant="tonal" rounded>
+      <v-btn class="user-menu-btn mr-4" variant="tonal" :rounded="false">
         <v-avatar size="32" color="primary" class="mr-2">
           <span class="text-white font-weight-bold">{{ userInitials }}</span>
         </v-avatar>
@@ -315,44 +315,45 @@ const logout = async () => {
 
 <style scoped>
 .sidebar-drawer {
-  background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%) !important;
+  background: #0f172a !important; /* Solid Navy */
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .sidebar-header {
   position: sticky;
   top: 0;
   z-index: 1;
-  background: rgba(15, 23, 42, 0.95);
-  backdrop-filter: blur(10px);
+  background: #0f172a;
 }
 
 .nav-section-title {
-  color: #64748b !important;
-  font-size: 0.7rem !important;
-  letter-spacing: 0.1em;
-  margin-top: 16px !important;
+  color: #475569 !important;
+  font-size: 0.65rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.15em;
+  margin-top: 24px !important;
 }
 
 .nav-item {
-  margin: 4px 8px;
-  border-radius: 12px !important;
+  margin: 2px 0;
+  border-radius: 0 !important;
   color: #94a3b8 !important;
 }
 
 .nav-item:hover {
-  background: rgba(59, 130, 246, 0.1) !important;
+  background: rgba(255, 255, 255, 0.05) !important;
   color: white !important;
 }
 
 .nav-item.v-list-item--active {
-  background: linear-gradient(90deg, #3b82f6, #2563eb) !important;
+  background: var(--primary-600) !important;
   color: white !important;
+  border-left: 3px solid white;
 }
 
 .app-bar {
-  background: rgba(255, 255, 255, 0.95) !important;
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid #e2e8f0;
+  background: #ffffff !important;
+  border-bottom: 2px solid #0f172a;
 }
 
 .search-field {
@@ -360,16 +361,23 @@ const logout = async () => {
 }
 
 .search-field :deep(.v-field) {
-  background: #f1f5f9 !important;
-  border-radius: 12px;
+  background: #f8fafc !important;
+  border-radius: 0 !important;
+  border: 1px solid #e2e8f0;
 }
 
 .main-content {
-  background: #f8fafc;
+  background: #f1f5f9;
   min-height: 100vh;
+  padding: 0 !important;
+}
+
+.main-content :deep(.v-main__wrap) {
+  padding: 0;
 }
 
 .user-menu-btn {
   text-transform: none;
+  border-radius: 0 !important;
 }
 </style>

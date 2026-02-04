@@ -12,33 +12,38 @@
     </div>
 
     <!-- Filters -->
-    <v-card class="mb-6">
-      <v-card-text>
-        <v-row align="center">
+    <v-card class="border-b" flat>
+      <v-card-text class="py-2 px-4">
+        <v-row align="center" no-gutters class="ga-4">
           <v-col cols="12" md="6" lg="4">
             <v-text-field
               v-model="search"
               density="compact"
-              variant="outlined"
+              variant="solo"
+              flat
               placeholder="Cerca per nome, email, telefono..."
               prepend-inner-icon="mdi-magnify"
               hide-details
               clearable
+              class="border"
             />
           </v-col>
           <v-col cols="12" md="3" lg="2">
             <v-select
               v-model="filterType"
               density="compact"
-              variant="outlined"
+              variant="solo"
+              flat
               :items="customerTypes"
               label="Tipo"
               hide-details
               clearable
+              class="border"
             />
           </v-col>
+          <v-spacer />
           <v-col cols="auto">
-            <v-btn-toggle v-model="viewMode" mandatory density="compact">
+            <v-btn-toggle v-model="viewMode" mandatory density="compact" variant="outlined">
               <v-btn icon="mdi-view-list" value="list" />
               <v-btn icon="mdi-view-grid" value="grid" />
             </v-btn-toggle>
@@ -207,7 +212,7 @@ const headers = [
   { title: 'Località', key: 'address', sortable: true },
   { title: 'Tipo', key: 'customer_type', sortable: true },
   { title: 'Veicoli', key: 'vehicles_count', sortable: false },
-  { title: 'Azioni', key: 'actions', sortable: false, align: 'end' }
+  { title: 'Azioni', key: 'actions', sortable: false, align: 'end' as const }
 ]
 
 // Computed

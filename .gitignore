@@ -1,0 +1,34 @@
+# Supabase local infrastructure
+supabase/
+
+# macOS
+.DS_Store
+
+# Node
+node_modules/
+.nuxt/
+.output/
+dist/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Testing
+coverage/
+
+# Build
+*.tsbuildinfo

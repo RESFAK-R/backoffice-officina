@@ -17,40 +17,46 @@
     </div>
 
     <!-- Filters -->
-    <v-card class="mb-6">
-      <v-card-text>
-        <v-row align="center">
+    <v-card class="border-b" flat>
+      <v-card-text class="py-2 px-4">
+        <v-row align="center" no-gutters class="ga-4">
           <v-col cols="12" md="4">
             <v-text-field
               v-model="search"
               density="compact"
-              variant="outlined"
+              variant="solo"
+              flat
               placeholder="Cerca per nome, SKU, codice OEM..."
               prepend-inner-icon="mdi-magnify"
               hide-details
               clearable
+              class="border"
             />
           </v-col>
           <v-col cols="12" md="3">
             <v-select
               v-model="filterCategory"
               density="compact"
-              variant="outlined"
+              variant="solo"
+              flat
               :items="categories"
               label="Categoria"
               hide-details
               clearable
+              class="border"
             />
           </v-col>
           <v-col cols="12" md="3">
             <v-select
               v-model="filterBrand"
               density="compact"
-              variant="outlined"
+              variant="solo"
+              flat
               :items="brands"
               label="Marca"
               hide-details
               clearable
+              class="border"
             />
           </v-col>
           <v-col cols="auto">
@@ -443,7 +449,7 @@ const headers = [
   { title: 'Prezzo Vendita', key: 'selling_price', sortable: true },
   { title: 'Margine', key: 'margin', sortable: false },
   { title: 'Posizione', key: 'location', sortable: true },
-  { title: 'Azioni', key: 'actions', sortable: false, align: 'end' }
+  { title: 'Azioni', key: 'actions', sortable: false, align: 'end' as const }
 ]
 
 // Computed

@@ -19,7 +19,11 @@ useHead({
 </script>
 
 <style>
-/* Global font */
+/* Global reset for sharp corners */
+*, *::before, *::after {
+  border-radius: 0 !important;
+}
+
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
