@@ -240,76 +240,78 @@ a:hover {
 /* Statistics Cards */
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 1px;
-  /* Sharp grid look */
-  background: var(--border-color);
-  margin-bottom: 0;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  background: transparent;
   border-bottom: 1px solid var(--border-color);
 }
 
+@media (max-width: 1024px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .stat-card {
-  background: var(--primary-900);
-  color: white;
-  padding: 1.5rem;
+  background: white;
+  color: var(--text-primary);
+  padding: 1.25rem 1.5rem;
   border-radius: 0;
-  border-left: 4px solid var(--primary-300);
+  border-right: 1px solid var(--border-color);
+  border-top: 3px solid var(--primary-600);
   position: relative;
   overflow: hidden;
 }
 
-.stat-card::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  right: -50%;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
-  pointer-events: none;
+.stat-card:last-child {
+  border-right: none;
 }
 
 .stat-card.success {
-  background: #064e3b;
-  border-left-color: #34d399;
+  border-top-color: #10b981;
 }
 
 .stat-card.warning {
-  background: #78350f;
-  border-left-color: #fbbf24;
+  border-top-color: #f59e0b;
 }
 
 .stat-card.error {
-  background: #7f1d1d;
-  border-left-color: #f87171;
+  border-top-color: #ef4444;
 }
 
 .stat-card.info {
-  background: #0c4a6e;
-  border-left-color: #38bdf8;
+  border-top-color: #3b82f6;
 }
 
 .stat-value {
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: 800;
   line-height: 1;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.25rem;
+  color: var(--primary-900);
 }
 
 .stat-label {
-  font-size: 0.75rem;
-  font-weight: 700;
+  font-size: 0.7rem;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
 }
 
 .stat-icon {
   position: absolute;
   top: 1rem;
   right: 1rem;
-  font-size: 2.5rem;
+  font-size: 2rem;
   opacity: 0.15;
+  color: var(--primary-600);
 }
 
 /* Status Badges */
@@ -634,9 +636,9 @@ a:hover {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.75rem;
-  padding: 1.5rem;
-  background: var(--bg-primary);
+  gap: 0.5rem;
+  padding: 1rem;
+  background: var(--bg-secondary);
   border: 1px solid var(--border-color);
   border-radius: 0;
   cursor: pointer;
@@ -647,17 +649,18 @@ a:hover {
 
 .quick-action-btn:hover {
   border-color: var(--primary-600);
-  background: var(--primary-100);
-  color: var(--primary-900);
+  background: var(--primary-50);
+  color: var(--primary-700);
 }
 
 .quick-action-icon {
-  font-size: 2rem;
+  font-size: 1.5rem;
+  color: var(--primary-600);
 }
 
 .quick-action-label {
-  font-size: 0.875rem;
-  font-weight: 500;
+  font-size: 0.75rem;
+  font-weight: 600;
 }
 
 /* Loading States */
@@ -830,6 +833,31 @@ a:hover {
 
 .v-data-table :deep(td) {
   padding: 0 1rem !important;
+}
+
+/* More Vuetify overrides for sharp corners */
+.v-list-item {
+  border-radius: 0 !important;
+}
+
+.v-chip {
+  border-radius: 0 !important;
+}
+
+.v-field {
+  border-radius: 0 !important;
+}
+
+.v-navigation-drawer {
+  border-radius: 0 !important;
+}
+
+.v-menu>.v-overlay__content {
+  border-radius: 0 !important;
+}
+
+.v-dialog>.v-overlay__content {
+  border-radius: 0 !important;
 }
 
 /* Animations */
