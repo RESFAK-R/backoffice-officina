@@ -1,303 +1,399 @@
 <template>
   <v-app>
-    <!-- Navigation Drawer -->
+    <!-- Sidebar Navigation Drawer -->
     <v-navigation-drawer
       v-model="drawer"
-      :rail="rail"
-      permanent
-      class="sidebar-drawer"
+      :rail="rail && !isMobile"
+      :permanent="!isMobile"
+      :temporary="isMobile"
+      width="220"
+      rail-width="64"
+      class="sidebar"
     >
-      <!-- Logo -->
-      <div class="sidebar-header pa-4">
-        <div class="d-flex align-center">
-          <v-icon size="32" color="primary" class="mr-3">mdi-car-wrench</v-icon>
-          <span v-if="!rail" class="text-h6 font-weight-bold text-white">Officina Pro</span>
-        </div>
+      <!-- Logo Section -->
+      <div class="sidebar-logo">
+        <v-icon size="24" color="white">mdi-car-wrench</v-icon>
+        <span v-show="!rail || isMobile" class="logo-text">Officina Pro</span>
       </div>
 
-      <v-divider class="border-opacity-25" />
+      <v-divider class="my-1 mx-2" style="border-color: rgba(255,255,255,0.1)" />
 
-      <!-- Navigation -->
-      <v-list nav density="compact" class="mt-2">
-        <!-- Dashboard -->
+      <!-- Navigation Menu -->
+      <v-list nav density="compact" class="px-2">
         <v-list-item
-          to="/"
-          :active="$route.path === '/'"
-          prepend-icon="mdi-view-dashboard"
-          title="Dashboard"
-          class="nav-item"
-        />
-
-        <v-list-subheader v-if="!rail" class="nav-section-title">GESTIONE</v-list-subheader>
-
-        <v-list-item
-          to="/customers"
-          :active="$route.path.startsWith('/customers')"
-          prepend-icon="mdi-account-group"
-          title="Clienti"
-          class="nav-item"
-        />
-
-        <v-list-item
-          to="/vehicles"
-          :active="$route.path.startsWith('/vehicles')"
-          prepend-icon="mdi-car"
-          title="Veicoli"
-          class="nav-item"
-        />
-
-        <v-list-item
-          to="/work-orders"
-          :active="$route.path.startsWith('/work-orders')"
-          prepend-icon="mdi-clipboard-text"
-          title="Ordini di Lavoro"
-          class="nav-item"
+          v-for="item in menuItems"
+          :key="item.to"
+          :to="item.to"
+          :prepend-icon="item.icon"
+          :title="rail && !isMobile ? '' : item.title"
+          :active="isActive(item.to)"
+          class="nav-item mb-1"
+          rounded="lg"
         >
-          <template #append>
-            <v-badge
-              v-if="activeOrdersCount > 0"
-              :content="activeOrdersCount"
-              color="warning"
-              inline
-            />
+          <template v-if="item.badge && (!rail || isMobile)" #append>
+            <v-chip :color="item.badgeColor" size="x-small" label>{{ item.badge }}</v-chip>
           </template>
         </v-list-item>
-
-        <v-list-subheader v-if="!rail" class="nav-section-title">PIANIFICAZIONE</v-list-subheader>
-
-        <v-list-item
-          to="/appointments"
-          :active="$route.path.startsWith('/appointments')"
-          prepend-icon="mdi-calendar-clock"
-          title="Appuntamenti"
-          class="nav-item"
-        />
-
-        <v-list-subheader v-if="!rail" class="nav-section-title">AMMINISTRAZIONE</v-list-subheader>
-
-        <v-list-item
-          to="/invoices"
-          :active="$route.path.startsWith('/invoices')"
-          prepend-icon="mdi-file-document"
-          title="Fatture"
-          class="nav-item"
-        />
-
-        <v-list-item
-          to="/inventory"
-          :active="$route.path.startsWith('/inventory')"
-          prepend-icon="mdi-package-variant"
-          title="Magazzino"
-          class="nav-item"
-        >
-          <template #append>
-            <v-badge
-              v-if="lowStockCount > 0"
-              :content="lowStockCount"
-              color="error"
-              inline
-            />
-          </template>
-        </v-list-item>
-
-        <v-list-subheader v-if="!rail" class="nav-section-title">REPORT</v-list-subheader>
-
-        <v-list-item
-          to="/reports"
-          :active="$route.path.startsWith('/reports')"
-          prepend-icon="mdi-chart-bar"
-          title="Report & Analytics"
-          class="nav-item"
-        />
       </v-list>
 
+      <!-- Collapse Button -->
       <template #append>
-        <v-divider class="border-opacity-25" />
-        <div class="pa-2">
+        <div class="pa-2" v-if="!isMobile">
           <v-btn
             block
             variant="text"
+            size="small"
             :icon="rail ? 'mdi-chevron-right' : 'mdi-chevron-left'"
+            class="collapse-btn"
             @click="rail = !rail"
           />
         </div>
       </template>
     </v-navigation-drawer>
 
-    <!-- App Bar -->
-    <v-app-bar flat class="app-bar">
-      <template #prepend>
-        <v-app-bar-nav-icon @click="drawer = !drawer" class="d-md-none" />
-      </template>
+    <!-- Top App Bar -->
+    <v-app-bar flat density="compact" class="topbar">
+      <!-- Mobile Menu Button -->
+      <v-app-bar-nav-icon
+        v-if="isMobile"
+        @click="drawer = !drawer"
+        size="small"
+      />
 
+      <!-- Search -->
       <v-text-field
         v-model="searchQuery"
-        class="search-field ml-4"
-        density="compact"
+        placeholder="Cerca..."
+        prepend-inner-icon="mdi-magnify"
         variant="solo-filled"
         flat
         hide-details
-        placeholder="Cerca clienti, veicoli, ordini..."
-        prepend-inner-icon="mdi-magnify"
         single-line
-        max-width="400"
+        density="compact"
+        class="search-field mx-2"
+        style="max-width: 260px;"
         @keyup.enter="performSearch"
       />
 
       <v-spacer />
 
-      <!-- Quick Actions -->
-      <v-btn icon variant="text" class="mr-2">
-        <v-icon>mdi-plus-circle-outline</v-icon>
-        <v-menu activator="parent">
-          <v-list>
-            <v-list-item
-              prepend-icon="mdi-account-plus"
-              title="Nuovo Cliente"
-              @click="navigateTo('/customers/new')"
-            />
-            <v-list-item
-              prepend-icon="mdi-car-plus"
-              title="Nuovo Veicolo"
-              @click="navigateTo('/vehicles/new')"
-            />
-            <v-list-item
-              prepend-icon="mdi-clipboard-plus"
-              title="Nuovo Ordine"
-              @click="navigateTo('/work-orders/new')"
-            />
-            <v-list-item
-              prepend-icon="mdi-calendar-plus"
-              title="Nuovo Appuntamento"
-              @click="navigateTo('/appointments/new')"
-            />
-          </v-list>
-        </v-menu>
-      </v-btn>
+      <!-- Quick Add -->
+      <v-menu>
+        <template #activator="{ props }">
+          <v-btn icon variant="text" size="small" v-bind="props">
+            <v-icon size="20">mdi-plus</v-icon>
+          </v-btn>
+        </template>
+        <v-list density="compact" width="160">
+          <v-list-item
+            v-for="action in quickActions"
+            :key="action.to"
+            :prepend-icon="action.icon"
+            :title="action.title"
+            @click="$router.push(action.to)"
+          />
+        </v-list>
+      </v-menu>
 
       <!-- Notifications -->
-      <v-btn icon variant="text" class="mr-2">
-        <v-badge 
-          :content="notifications.length" 
-          color="error"
-          :model-value="notifications.length > 0"
-        >
-          <v-icon>mdi-bell-outline</v-icon>
-        </v-badge>
-        <v-menu activator="parent" width="350">
-          <v-card>
-            <v-card-title class="d-flex align-center">
-              <span>Notifiche</span>
-              <v-spacer />
-              <v-btn size="small" variant="text" color="primary">Segna tutte come lette</v-btn>
-            </v-card-title>
-            <v-divider />
-            <v-list v-if="notifications.length > 0">
-              <v-list-item
-                v-for="(notification, i) in notifications"
-                :key="i"
-                :prepend-icon="notification.icon"
-                :title="notification.title"
-                :subtitle="notification.message"
-              />
-            </v-list>
-            <v-card-text v-else class="text-center text-grey">
-              Nessuna nuova notifica
-            </v-card-text>
-          </v-card>
-        </v-menu>
-      </v-btn>
+      <v-menu width="320" :close-on-content-click="false">
+        <template #activator="{ props }">
+          <v-btn icon variant="text" size="small" v-bind="props" class="mx-1">
+            <v-badge :content="notifications.length" color="error" :model-value="notifications.length > 0">
+              <v-icon size="20">mdi-bell-outline</v-icon>
+            </v-badge>
+          </v-btn>
+        </template>
+        <v-card>
+          <v-card-title class="d-flex align-center justify-space-between py-2 px-4">
+            <span class="text-body-2 font-weight-bold">Notifiche</span>
+            <v-btn
+              v-if="notifications.length"
+              variant="text"
+              size="x-small"
+              color="primary"
+              @click="clearAllNotifications"
+            >
+              Segna tutte lette
+            </v-btn>
+          </v-card-title>
+          <v-divider />
+          <div v-if="notificationsLoading" class="text-center py-4">
+            <v-progress-circular indeterminate size="24" color="primary" />
+          </div>
+          <v-list v-else-if="notifications.length" density="compact" max-height="360" class="overflow-y-auto">
+            <v-list-item
+              v-for="(n, i) in notifications"
+              :key="i"
+              :prepend-icon="n.icon"
+              class="notification-item"
+              @click="n.action ? n.action() : null"
+            >
+              <v-list-item-title class="text-body-2 font-weight-medium">
+                {{ n.title }}
+              </v-list-item-title>
+              <v-list-item-subtitle class="text-caption">
+                {{ n.message }}
+              </v-list-item-subtitle>
+              <template #append>
+                <v-btn icon variant="text" size="x-small" @click.stop="dismissNotification(i)">
+                  <v-icon size="14">mdi-close</v-icon>
+                </v-btn>
+              </template>
+            </v-list-item>
+          </v-list>
+          <v-card-text v-else class="text-center text-grey py-6">
+            <v-icon size="32" color="grey-lighten-1" class="mb-2">mdi-bell-check-outline</v-icon>
+            <div class="text-body-2">Nessuna notifica</div>
+          </v-card-text>
+        </v-card>
+      </v-menu>
 
       <!-- User Menu -->
-      <v-btn class="user-menu-btn mr-4" variant="tonal" :rounded="false">
-        <v-avatar size="32" color="primary" class="mr-2">
-          <span class="text-white font-weight-bold">{{ userInitials }}</span>
-        </v-avatar>
-        <span class="d-none d-sm-inline">{{ userName }}</span>
-        <v-icon end>mdi-chevron-down</v-icon>
-        <v-menu activator="parent">
-          <v-list>
-            <v-list-item
-              prepend-icon="mdi-account"
-              title="Profilo"
-            />
-            <v-list-item
-              prepend-icon="mdi-cog"
-              title="Impostazioni"
-            />
-            <v-divider />
-            <v-list-item
-              prepend-icon="mdi-logout"
-              title="Esci"
-              @click="logout"
-            />
-          </v-list>
-        </v-menu>
-      </v-btn>
+      <v-menu>
+        <template #activator="{ props }">
+          <v-btn v-bind="props" variant="text" class="user-btn ml-1 mr-2" rounded="lg">
+            <v-avatar size="28" color="primary" class="mr-2">
+              <span class="text-caption font-weight-bold text-white">{{ userInitials }}</span>
+            </v-avatar>
+            <span v-if="!isMobile" class="text-body-2">{{ userName }}</span>
+            <v-icon size="14" class="ml-1">mdi-chevron-down</v-icon>
+          </v-btn>
+        </template>
+        <v-list density="compact" width="150">
+          <v-list-item prepend-icon="mdi-account" title="Profilo" />
+          <v-list-item prepend-icon="mdi-cog" title="Impostazioni" />
+          <v-divider class="my-1" />
+          <v-list-item prepend-icon="mdi-logout" title="Esci" @click="logout" />
+        </v-list>
+      </v-menu>
     </v-app-bar>
 
-    <!-- Main Content -->
-    <v-main class="main-content">
+    <!-- Main Content Area -->
+    <v-main class="main-area">
       <slot />
     </v-main>
 
-    <!-- Snackbar for notifications -->
-    <v-snackbar
-      v-model="snackbar.show"
-      :color="snackbar.color"
-      :timeout="snackbar.timeout"
-      location="top right"
-    >
+    <!-- Global Snackbar -->
+    <v-snackbar v-model="snackbar.show" :color="snackbar.color" location="top right" :timeout="3000">
       {{ snackbar.message }}
       <template #actions>
-        <v-btn variant="text" @click="snackbar.show = false">
-          Chiudi
-        </v-btn>
+        <v-btn variant="text" size="small" @click="snackbar.show = false">Chiudi</v-btn>
       </template>
     </v-snackbar>
   </v-app>
 </template>
 
 <script setup lang="ts">
+import { useDisplay } from 'vuetify'
+
+const route = useRoute()
 const router = useRouter()
+const display = useDisplay()
+
+const isMobile = computed(() => display.smAndDown.value)
+
 const drawer = ref(true)
 const rail = ref(false)
 const searchQuery = ref('')
 
-// User info (mock - da sostituire con auth reale)
+// User
 const userName = ref('Admin User')
 const userInitials = computed(() => {
-  const parts = userName.value.split(' ')
-  return parts.map(p => p[0]).join('').toUpperCase().slice(0, 2)
+  return userName.value.split(' ').map(p => p[0]).join('').toUpperCase().slice(0, 2)
 })
 
-// Counters for badges
-const activeOrdersCount = ref(5)
-const lowStockCount = ref(3)
+// Badge counts (real data)
+const pendingOrdersCount = ref(0)
+const lowStockCount = ref(0)
 
-// Notifications
-const notifications = ref([
-  { icon: 'mdi-alert', title: 'Scorta bassa', message: 'Olio motore sotto il minimo' },
-  { icon: 'mdi-calendar-alert', title: 'Appuntamento', message: 'Mario Rossi - 15:00' }
+const loadBadgeCounts = async () => {
+  const client = useSupabaseClient()
+  try {
+    const { count: pending } = await client
+      .from('work_orders')
+      .select('*', { count: 'exact', head: true })
+      .in('status', ['pending', 'in_progress', 'waiting_parts'])
+
+    pendingOrdersCount.value = pending || 0
+
+    const { data: inventoryData } = await client
+      .from('inventory')
+      .select('quantity, min_quantity')
+
+    lowStockCount.value = (inventoryData || []).filter(
+      (item: any) => item.quantity <= item.min_quantity
+    ).length
+  } catch (e) {
+    console.error('Error loading badge counts:', e)
+  }
+}
+
+// Menu Items
+const menuItems = computed(() => [
+  { to: '/', icon: 'mdi-view-dashboard', title: 'Dashboard' },
+  { to: '/customers', icon: 'mdi-account-group', title: 'Clienti' },
+  { to: '/vehicles', icon: 'mdi-car', title: 'Veicoli' },
+  { to: '/work-orders', icon: 'mdi-clipboard-text', title: 'Ordini', badge: pendingOrdersCount.value || undefined, badgeColor: 'warning' },
+  { to: '/appointments', icon: 'mdi-calendar-clock', title: 'Appuntamenti' },
+  { to: '/invoices', icon: 'mdi-file-document', title: 'Fatture' },
+  { to: '/inventory', icon: 'mdi-package-variant', title: 'Magazzino', badge: lowStockCount.value || undefined, badgeColor: 'error' },
+  { to: '/car-sales', icon: 'mdi-tag', title: 'Auto in Vendita' },
+  { to: '/reports', icon: 'mdi-chart-bar', title: 'Report' }
 ])
 
-// Snackbar
-const snackbar = reactive({
-  show: false,
-  message: '',
-  color: 'success',
-  timeout: 3000
+const quickActions = [
+  { to: '/customers/new', icon: 'mdi-account-plus', title: 'Nuovo Cliente' },
+  { to: '/vehicles/new', icon: 'mdi-car', title: 'Nuovo Veicolo' },
+  { to: '/work-orders/new', icon: 'mdi-clipboard-plus', title: 'Nuovo Ordine' },
+  { to: '/appointments/new', icon: 'mdi-calendar-plus', title: 'Appuntamento' }
+]
+
+// Dynamic notifications
+const notifications = ref<Array<{icon: string, title: string, message: string, action?: () => void}>>([])
+const notificationsLoading = ref(false)
+
+const loadNotifications = async () => {
+  notificationsLoading.value = true
+  const client = useSupabaseClient()
+  const items: typeof notifications.value = []
+
+  try {
+    // 1. Low stock inventory items
+    const { data: inventoryData } = await client
+      .from('inventory')
+      .select('id, name, quantity, min_quantity')
+
+    if (inventoryData) {
+      for (const raw of inventoryData) {
+        const item = raw as any
+        if (item.quantity < item.min_quantity) {
+          items.push({
+            icon: 'mdi-package-variant-closed-remove',
+            title: 'Scorta bassa',
+            message: `${item.name}: ${item.quantity}/${item.min_quantity} pz`,
+            action: () => router.push('/inventory')
+          })
+        }
+      }
+    }
+
+    // 2. Today's appointments
+    const today = new Date()
+    const todayStr = today.toISOString().split('T')[0]
+    const tomorrowStr = new Date(today.getTime() + 86400000).toISOString().split('T')[0]
+
+    const { data: appointments } = await client
+      .from('appointments')
+      .select('id, scheduled_at, service_type, customers(name)')
+      .gte('scheduled_at', todayStr)
+      .lt('scheduled_at', tomorrowStr)
+      .eq('status', 'scheduled')
+      .order('scheduled_at', { ascending: true })
+      .limit(5)
+
+    if (appointments) {
+      for (const raw of appointments) {
+        const apt = raw as any
+        const time = new Date(apt.scheduled_at).toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' })
+        const customerName = apt.customers?.name || 'Cliente'
+        items.push({
+          icon: 'mdi-calendar-clock',
+          title: 'Appuntamento oggi',
+          message: `${customerName} - ${time}`,
+          action: () => router.push('/appointments')
+        })
+      }
+    }
+
+    // 3. Pending work orders (not started)
+    const pendingResult = await client
+      .from('work_orders')
+      .select('id, order_number, vehicles(plate)', { count: 'exact' })
+      .eq('status', 'pending')
+      .limit(3)
+
+    const pendingOrders = pendingResult.data as any[] | null
+    const pendingCount = pendingResult.count
+
+    if (pendingCount && pendingCount > 0) {
+      items.push({
+        icon: 'mdi-clipboard-alert',
+        title: `${pendingCount} ordini in attesa`,
+        message: pendingOrders?.map((o: any) => o.order_number).join(', ') || '',
+        action: () => router.push('/work-orders')
+      })
+    }
+
+    // 4. Vehicles with expiring MOT/insurance (next 30 days)
+    const in30days = new Date(today.getTime() + 30 * 86400000).toISOString().split('T')[0]
+    const { data: expiringVehicles } = await client
+      .from('vehicles')
+      .select('id, plate, brand, model, mot_expiry, insurance_expiry')
+      .or(`mot_expiry.lte.${in30days},insurance_expiry.lte.${in30days}`)
+      .limit(5)
+
+    if (expiringVehicles) {
+      for (const raw of expiringVehicles) {
+        const v = raw as any
+        if (v.mot_expiry && new Date(v.mot_expiry) <= new Date(in30days)) {
+          const expired = new Date(v.mot_expiry) < today
+          items.push({
+            icon: expired ? 'mdi-alert-circle' : 'mdi-alert',
+            title: expired ? 'Revisione scaduta' : 'Revisione in scadenza',
+            message: `${v.plate} - ${v.brand} ${v.model}`,
+            action: () => router.push(`/vehicles/${v.id}`)
+          })
+        }
+        if (v.insurance_expiry && new Date(v.insurance_expiry) <= new Date(in30days)) {
+          const expired = new Date(v.insurance_expiry) < today
+          items.push({
+            icon: expired ? 'mdi-shield-alert' : 'mdi-shield-car',
+            title: expired ? 'Assicurazione scaduta' : 'Assicurazione in scadenza',
+            message: `${v.plate} - ${v.brand} ${v.model}`,
+            action: () => router.push(`/vehicles/${v.id}`)
+          })
+        }
+      }
+    }
+  } catch (e) {
+    console.error('Error loading notifications:', e)
+  } finally {
+    notifications.value = items
+    notificationsLoading.value = false
+  }
+}
+
+const dismissNotification = (index: number) => {
+  notifications.value.splice(index, 1)
+}
+
+const clearAllNotifications = () => {
+  notifications.value = []
+}
+
+// Load notifications and badge counts on mount and refresh every 5 min
+onMounted(() => {
+  loadNotifications()
+  loadBadgeCounts()
+  setInterval(() => {
+    loadNotifications()
+    loadBadgeCounts()
+  }, 5 * 60 * 1000)
 })
 
-// Provide snackbar function to children
-provide('showSnackbar', (message: string, color = 'success') => {
-  snackbar.message = message
+// Snackbar
+const snackbar = reactive({ show: false, message: '', color: 'success' })
+provide('showSnackbar', (msg: string, color = 'success') => {
+  snackbar.message = msg
   snackbar.color = color
   snackbar.show = true
 })
 
-const navigateTo = (path: string) => {
-  router.push(path)
+// Helpers
+const isActive = (path: string) => {
+  if (path === '/') return route.path === '/'
+  return route.path.startsWith(path)
 }
 
 const performSearch = () => {
@@ -313,71 +409,84 @@ const logout = async () => {
 }
 </script>
 
-<style scoped>
-.sidebar-drawer {
-  background: #0f172a !important; /* Solid Navy */
-  border-right: 1px solid rgba(255, 255, 255, 0.05);
+<style lang="scss" scoped>
+// Sidebar
+.sidebar {
+  background: #18181b !important;
+  border-right: none !important;
 }
 
-.sidebar-header {
-  position: sticky;
-  top: 0;
-  z-index: 1;
-  background: #0f172a;
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  min-height: 48px;
 }
 
-.nav-section-title {
-  color: #475569 !important;
-  font-size: 0.65rem !important;
-  font-weight: 700 !important;
-  letter-spacing: 0.15em;
-  margin-top: 24px !important;
+.logo-text {
+  font-size: 1rem;
+  font-weight: 700;
+  color: white;
+  white-space: nowrap;
 }
 
 .nav-item {
-  margin: 2px 0;
-  border-radius: 0 !important;
-  color: #94a3b8 !important;
+  color: rgba(255, 255, 255, 0.6) !important;
+  
+  :deep(.v-list-item__prepend) {
+    color: rgba(255, 255, 255, 0.6);
+  }
+  
+  &:hover {
+    background: rgba(255, 255, 255, 0.08) !important;
+    color: white !important;
+    
+    :deep(.v-list-item__prepend) {
+      color: white;
+    }
+  }
+  
+  &.v-list-item--active {
+    background: rgba(255, 255, 255, 0.12) !important;
+    color: white !important;
+    
+    :deep(.v-list-item__prepend) {
+      color: white;
+    }
+  }
 }
 
-.nav-item:hover {
-  background: rgba(255, 255, 255, 0.05) !important;
-  color: white !important;
+.collapse-btn {
+  color: rgba(255, 255, 255, 0.5) !important;
+  
+  &:hover {
+    color: white !important;
+  }
 }
 
-.nav-item.v-list-item--active {
-  background: var(--primary-600) !important;
-  color: white !important;
-  border-left: 3px solid white;
-}
-
-.app-bar {
+// Top Bar
+.topbar {
   background: #ffffff !important;
-  border-bottom: 2px solid #0f172a;
+  border-bottom: 1px solid #e4e4e7 !important;
 }
 
 .search-field {
-  max-width: 400px;
+  :deep(.v-field) {
+    background: #f4f4f5 !important;
+    border-radius: 8px !important;
+    font-size: 0.8125rem;
+  }
 }
 
-.search-field :deep(.v-field) {
-  background: #f8fafc !important;
-  border-radius: 0 !important;
-  border: 1px solid #e2e8f0;
-}
-
-.main-content {
-  background: #f1f5f9;
-  min-height: 100vh;
-  padding: 64px 0 0 0 !important; /* Top padding for navbar */
-}
-
-.main-content :deep(.v-main__wrap) {
-  padding: 0;
-}
-
-.user-menu-btn {
+.user-btn {
   text-transform: none;
-  border-radius: 0 !important;
+  font-weight: 500;
+}
+
+// Main Content
+.main-area {
+  background: #fafafa;
+  min-height: 100vh;
 }
 </style>

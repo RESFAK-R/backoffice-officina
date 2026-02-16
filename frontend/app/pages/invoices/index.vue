@@ -265,7 +265,7 @@
 <script setup lang="ts">
 import type { Invoice } from '~/types/database.types'
 
-const { fetchInvoices, updateInvoice, markAsPaid } = useInvoices()
+const { fetchInvoices, updateInvoice, markAsPaid, deleteInvoice } = useInvoices()
 const showSnackbar = inject('showSnackbar') as (msg: string, color?: string) => void
 
 // State
@@ -500,7 +500,7 @@ const deleteInvoiceConfirm = async () => {
   
   deleting.value = true
   try {
-    // In real app, you'd call the delete API
+    await deleteInvoice(invoiceToDelete.value.id)
     invoices.value = invoices.value.filter(i => i.id !== invoiceToDelete.value.id)
     showSnackbar('Fattura eliminata', 'success')
     deleteDialog.value = false

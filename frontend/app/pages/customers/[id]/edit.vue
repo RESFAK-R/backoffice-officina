@@ -1,17 +1,21 @@
 <template>
   <div class="page-container">
-    <!-- Page Header -->
     <div class="page-header">
       <div>
-        <v-btn variant="text" prepend-icon="mdi-arrow-left" to="/customers" class="mb-2">
-          Torna ai clienti
+        <v-btn variant="text" prepend-icon="mdi-arrow-left" :to="`/customers/${customerId}`" class="mb-2">
+          Torna al cliente
         </v-btn>
-        <h1 class="page-title">{{ isEdit ? 'Modifica Cliente' : 'Nuovo Cliente' }}</h1>
-        <p class="page-subtitle">{{ isEdit ? 'Aggiorna i dati del cliente' : 'Inserisci i dati del nuovo cliente' }}</p>
+        <h1 class="page-title">Modifica Cliente</h1>
+        <p class="page-subtitle">Aggiorna i dati del cliente</p>
       </div>
     </div>
 
-    <v-card>
+    <!-- Loading -->
+    <div v-if="loadingCustomer" class="pa-6">
+      <v-skeleton-loader type="article, actions" />
+    </div>
+
+    <v-card v-else>
       <v-form ref="form" v-model="valid" @submit.prevent="submitForm">
         <v-card-text>
           <v-row>
@@ -164,7 +168,7 @@
         <v-divider />
 
         <v-card-actions class="pa-4">
-          <v-btn variant="text" to="/customers">Annulla</v-btn>
+          <v-btn variant="text" :to="`/customers/${customerId}`">Annulla</v-btn>
           <v-spacer />
           <v-btn
             color="primary"
@@ -172,8 +176,9 @@
             :loading="saving"
             :disabled="!valid"
             size="large"
+            prepend-icon="mdi-content-save"
           >
-            {{ isEdit ? 'Salva Modifiche' : 'Crea Cliente' }}
+            Salva Modifiche
           </v-btn>
         </v-card-actions>
       </v-form>
@@ -182,38 +187,34 @@
 </template>
 
 <script setup lang="ts">
-import type { CustomerInsert, CustomerUpdate } from '~/types/database.types'
-
 const route = useRoute()
 const router = useRouter()
-const { createCustomer, updateCustomer, getCustomer } = useCustomers()
+const { getCustomer, updateCustomer } = useCustomers()
 const showSnackbar = inject('showSnackbar') as (msg: string, color?: string) => void
 
-// State
 const form = ref()
 const valid = ref(false)
 const saving = ref(false)
-const isEdit = computed(() => route.path.endsWith('/edit'))
+const loadingCustomer = ref(true)
 const customerId = computed(() => route.params.id as string)
 
-const formData = ref<CustomerInsert>({
+const formData = ref({
   name: '',
-  email: null,
-  phone: null,
-  address: null,
-  city: null,
-  postal_code: null,
-  province: null,
+  email: null as string | null,
+  phone: null as string | null,
+  address: null as string | null,
+  city: null as string | null,
+  postal_code: null as string | null,
+  province: null as string | null,
   country: 'Italia',
-  fiscal_code: null,
-  vat_number: null,
-  pec: null,
-  sdi_code: null,
-  notes: null,
-  customer_type: 'private'
+  fiscal_code: null as string | null,
+  vat_number: null as string | null,
+  pec: null as string | null,
+  sdi_code: null as string | null,
+  notes: null as string | null,
+  customer_type: 'private' as string
 })
 
-// Validation rules
 const rules = {
   required: (v: any) => !!v || 'Campo obbligatorio',
   email: (v: string) => !v || /.+@.+\..+/.test(v) || 'Email non valida',
@@ -221,7 +222,6 @@ const rules = {
   vatNumber: (v: string) => !v || /^[0-9]{11}$/.test(v) || 'Partita IVA non valida'
 }
 
-// Italian provinces
 const provinces = [
   'AG', 'AL', 'AN', 'AO', 'AR', 'AP', 'AT', 'AV', 'BA', 'BT', 'BL', 'BN', 'BG', 'BI', 'BO', 'BZ',
   'BS', 'BR', 'CA', 'CL', 'CB', 'CI', 'CE', 'CT', 'CZ', 'CH', 'CO', 'CS', 'CR', 'KR', 'CN', 'EN',
@@ -232,22 +232,36 @@ const provinces = [
   'TR', 'TO', 'TP', 'TN', 'TV', 'TS', 'UD', 'VA', 'VE', 'VB', 'VC', 'VR', 'VV', 'VI', 'VT'
 ]
 
-// Load existing customer data if editing
+// Load customer
 onMounted(async () => {
-  if (isEdit.value && customerId.value) {
-    try {
-      const customer = await getCustomer(customerId.value)
-      if (customer) {
-        formData.value = { ...customer }
+  try {
+    const customer = await getCustomer(customerId.value)
+    if (customer) {
+      formData.value = {
+        name: customer.name || '',
+        email: customer.email || null,
+        phone: customer.phone || null,
+        address: customer.address || null,
+        city: customer.city || null,
+        postal_code: customer.postal_code || null,
+        province: customer.province || null,
+        country: customer.country || 'Italia',
+        fiscal_code: customer.fiscal_code || null,
+        vat_number: customer.vat_number || null,
+        pec: customer.pec || null,
+        sdi_code: customer.sdi_code || null,
+        notes: customer.notes || null,
+        customer_type: customer.customer_type || 'private'
       }
-    } catch (error) {
-      showSnackbar('Errore nel caricamento del cliente', 'error')
-      router.push('/customers')
     }
+  } catch (error) {
+    showSnackbar('Errore nel caricamento del cliente', 'error')
+    router.push('/customers')
+  } finally {
+    loadingCustomer.value = false
   }
 })
 
-// Submit form
 const submitForm = async () => {
   if (!form.value) return
   
@@ -256,16 +270,9 @@ const submitForm = async () => {
 
   saving.value = true
   try {
-    if (isEdit.value) {
-      await updateCustomer(customerId.value, formData.value as CustomerUpdate)
-      showSnackbar('Cliente aggiornato con successo', 'success')
-    } else {
-      const newCustomer = await createCustomer(formData.value)
-      showSnackbar('Cliente creato con successo', 'success')
-      router.push(`/customers/${newCustomer.id}`)
-      return
-    }
-    router.push('/customers')
+    await updateCustomer(customerId.value, formData.value)
+    showSnackbar('Cliente aggiornato con successo', 'success')
+    router.push(`/customers/${customerId.value}`)
   } catch (error: any) {
     showSnackbar(error.message || 'Errore durante il salvataggio', 'error')
   } finally {

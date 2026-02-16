@@ -1,0 +1,611 @@
+// ========================================
+// OFFICINA MANAGEMENT SYSTEM - MAIN STYLES
+// Vuetify + SCSS with Violet/Indigo Theme
+// ========================================
+
+// ========================
+// SCSS Variables
+// ========================
+$primary-black: #18181b; // zinc-900
+$primary-dark: #09090b; // zinc-950
+$accent-violet: #7c3aed; // violet-600
+$accent-indigo: #4f46e5;
+$violet-400: #a78bfa;
+$violet-500: #8b5cf6;
+$violet-600: #7c3aed;
+$violet-700: #6d28d9;
+
+$indigo-400: #818cf8;
+$indigo-500: #6366f1;
+$indigo-600: #4f46e5;
+
+// Zinc neutral palette
+$zinc-50: #fafafa;
+$zinc-100: #f4f4f5;
+$zinc-200: #e4e4e7;
+$zinc-300: #d4d4d8;
+$zinc-400: #a1a1aa;
+$zinc-500: #71717a;
+$zinc-600: #52525b;
+$zinc-700: #3f3f46;
+$zinc-800: #27272a;
+$zinc-900: #18181b;
+
+// Semantic colors
+$success: #10b981;
+$warning: #f59e0b;
+$error: #ef4444;
+$info: #3b82f6;
+
+// Spacing (max 20px margins)
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 12px;
+$spacing-lg: 16px;
+$spacing-xl: 20px;
+
+// Transitions
+$transition-fast: 150ms ease;
+$transition-normal: 250ms ease;
+
+// ========================
+// Base Styles
+// ========================
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: $zinc-50;
+  color: $zinc-900;
+  line-height: 1.5;
+}
+
+// ========================
+// Typography
+// ========================
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  font-weight: 600;
+  line-height: 1.25;
+  color: $zinc-900;
+}
+
+h1 {
+  font-size: 1.75rem;
+}
+
+h2 {
+  font-size: 1.5rem;
+}
+
+h3 {
+  font-size: 1.25rem;
+}
+
+h4 {
+  font-size: 1.125rem;
+}
+
+h5 {
+  font-size: 1rem;
+}
+
+h6 {
+  font-size: 0.875rem;
+}
+
+p {
+  margin: 0 0 0.75rem;
+  color: $zinc-600;
+}
+
+a {
+  color: $violet-600;
+  text-decoration: none;
+  transition: color $transition-fast;
+
+  &:hover {
+    color: $violet-700;
+  }
+}
+
+// ========================
+// Page Layout Components
+// ========================
+.page-container {
+  width: 100%;
+  max-width: 100%;
+}
+
+.page-header {
+  padding: $spacing-md $spacing-lg;
+  margin-bottom: $spacing-md;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: $spacing-sm;
+  background: white;
+  border-bottom: 1px solid $zinc-200;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: $spacing-sm $spacing-md;
+  }
+}
+
+.page-title {
+  font-size: 1.375rem;
+  font-weight: 700;
+  color: $zinc-900;
+
+  @media (max-width: 600px) {
+    font-size: 1.125rem;
+  }
+}
+
+.page-subtitle {
+  font-size: 0.875rem;
+  color: $zinc-500;
+  margin-top: 2px;
+}
+
+// ========================
+// Stats Grid (Dashboard)
+// ========================
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: $spacing-md;
+  margin-bottom: $spacing-lg;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+    gap: $spacing-sm;
+  }
+}
+
+.stat-card {
+  background: white;
+  padding: $spacing-md $spacing-lg;
+  border-radius: 12px;
+  border: 1px solid $zinc-200;
+  position: relative;
+  overflow: hidden;
+  transition: all $transition-normal;
+
+  &:hover {
+    border-color: $violet-400;
+    box-shadow: 0 4px 12px rgba($violet-600, 0.1);
+  }
+
+  &.success {
+    border-top: 3px solid $success;
+  }
+
+  &.warning {
+    border-top: 3px solid $warning;
+  }
+
+  &.error {
+    border-top: 3px solid $error;
+  }
+
+  &.info {
+    border-top: 3px solid $info;
+  }
+
+  &.primary {
+    border-top: 3px solid $violet-600;
+  }
+}
+
+.stat-icon {
+  position: absolute;
+  top: $spacing-md;
+  right: $spacing-md;
+  opacity: 0.15;
+
+  .v-icon {
+    font-size: 2rem;
+    color: $violet-600;
+  }
+}
+
+.stat-value {
+  font-size: 1.75rem;
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 4px;
+  color: $zinc-900;
+
+  @media (max-width: 600px) {
+    font-size: 1.5rem;
+  }
+}
+
+.stat-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: $zinc-500;
+}
+
+// ========================
+// Quick Actions
+// ========================
+.quick-actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: $spacing-sm;
+
+  @media (max-width: 600px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.quick-action-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-xs;
+  padding: $spacing-md;
+  background: $zinc-50;
+  border: 1px solid $zinc-200;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all $transition-normal;
+  text-decoration: none;
+  color: $zinc-600;
+
+  &:hover {
+    border-color: $violet-500;
+    background: rgba($violet-600, 0.05);
+    color: $violet-700;
+
+    .quick-action-icon {
+      color: $violet-600;
+    }
+  }
+}
+
+.quick-action-icon {
+  color: $zinc-500;
+  transition: color $transition-fast;
+}
+
+.quick-action-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+// ========================
+// Animations
+// ========================
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease forwards;
+  opacity: 0;
+}
+
+// ========================
+// Vuetify Overrides
+// ========================
+
+// Cards
+.v-card {
+  border: 1px solid $zinc-200 !important;
+
+  &:hover {
+    border-color: $zinc-300 !important;
+  }
+}
+
+// Tables
+.v-data-table {
+  .v-data-table__th {
+    background: $zinc-50 !important;
+    font-weight: 700 !important;
+    font-size: 0.7rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.04em !important;
+    color: $zinc-600 !important;
+  }
+}
+
+// Chips with gradient for primary
+.v-chip--variant-flat.bg-primary {
+  background: linear-gradient(135deg, $violet-600, $indigo-600) !important;
+}
+
+// Buttons gradient hover effect
+.v-btn--variant-flat.bg-primary {
+  background: linear-gradient(135deg, $violet-600, $indigo-600) !important;
+
+  &:hover {
+    background: linear-gradient(135deg, $violet-700, $indigo-600) !important;
+  }
+}
+
+// List items active state
+.v-list-item--active {
+  .v-list-item__prepend .v-icon {
+    color: $violet-600 !important;
+  }
+}
+
+// ========================
+// Utility Classes
+// ========================
+.text-gradient {
+  background: linear-gradient(135deg, $violet-600, $indigo-600);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.bg-gradient-primary {
+  background: linear-gradient(135deg, $violet-600, $indigo-600);
+}
+
+// ========================
+// Print Styles
+// ========================
+@page {
+  margin: 10mm;
+}
+
+@media print {
+
+  // Hide navigation and UI chrome
+  .sidebar-drawer,
+  .app-bar,
+  .v-navigation-drawer,
+  .v-app-bar,
+  .v-snackbar {
+    display: none !important;
+  }
+
+  // Reset main layout
+  .v-main {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .v-application {
+    background: white !important;
+  }
+
+  .main-area {
+    background: white !important;
+  }
+
+  body {
+    background: white !important;
+    zoom: 85% !important;
+  }
+
+  .page-container {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  // Remove ALL shadows and elevation from Vuetify cards and elements
+  .v-card,
+  .v-sheet,
+  .v-table,
+  .v-alert,
+  .v-chip,
+  .v-avatar {
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+  }
+
+  // Remove elevation classes
+  [class*="elevation-"] {
+    box-shadow: none !important;
+  }
+
+  // Flatten cards: no depth, simple borders
+  .v-card {
+    border: 1px solid #ddd !important;
+    border-radius: 0 !important;
+    page-break-inside: avoid !important;
+  }
+
+  // Remove action buttons from print
+  .v-btn,
+  .page-header .d-flex.ga-2:last-child {
+    display: none !important;
+  }
+
+  // Keep card content visible
+  .v-card-title,
+  .v-card-text,
+  .v-card-actions {
+    box-shadow: none !important;
+  }
+
+  // Ensure tables print well
+  .v-table {
+    border: 1px solid #ddd !important;
+
+    th,
+    td {
+      padding: 4px 8px !important;
+      height: auto !important;
+      font-size: 9pt !important;
+    }
+  }
+
+  // Page header: keep title visible, remove background
+  .page-header {
+    background: white !important;
+    border-bottom: 2px solid #333 !important;
+    padding: 0 0 8px 0 !important;
+    margin-bottom: 12px !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: flex-end !important;
+
+    // Show the back button area but hide the button
+    .v-btn {
+      display: none !important;
+    }
+
+    .page-title {
+      margin: 0 !important;
+      font-size: 18pt !important;
+    }
+  }
+
+  // COMPACT PRINT LAYOUT
+  .v-row {
+    margin: 0 -4px !important;
+  }
+
+  .v-col {
+    padding: 4px !important;
+  }
+
+  .v-card-title {
+    padding: 8px 12px !important;
+    font-size: 11pt !important;
+    min-height: auto !important;
+  }
+
+  .v-card-text {
+    padding: 8px 12px !important;
+    font-size: 10pt !important;
+  }
+
+  .mb-4 {
+    margin-bottom: 8px !important;
+  }
+
+  // Specific for Work Order / Invoice detail layout
+  // Allow the columns to stack but take full width, or try to keep them side-by-side if they fit
+  .v-col-lg-8 {
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+  }
+
+  .v-col-lg-4 {
+    flex: 0 0 100% !important;
+    max-width: 100% !important;
+
+    // In print, we want the totals card to be very compact
+    .v-card {
+      margin-top: 12px !important;
+    }
+  }
+
+  // Hide elements with no-print or print-hide
+  .no-print,
+  .print-hide {
+    display: none !important;
+  }
+
+  // Keep titles visible and smaller
+  .page-title,
+  .page-subtitle,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    display: block !important;
+    color: black !important;
+  }
+
+  h1 {
+    font-size: 16pt !important;
+  }
+
+  h2 {
+    font-size: 14pt !important;
+  }
+
+  h3 {
+    font-size: 12pt !important;
+  }
+
+  // Clean chip styles for print
+  .v-avatar {
+    width: 32px !important;
+    height: 32px !important;
+    min-width: 32px !important;
+
+    .v-icon {
+      font-size: 16px !important;
+    }
+  }
+
+  // Clean chip styles for print
+  .v-chip {
+    border: 1px solid #999 !important;
+    background: transparent !important;
+    height: 20px !important;
+    font-size: 8pt !important;
+
+    .v-chip__content {
+      color: black !important;
+    }
+  }
+
+  // Ensure dividers are visible but thin
+  .v-divider {
+    border-color: #eee !important;
+    margin: 4px 0 !important;
+  }
+
+  // Force everything to stay in one page if possible
+  html,
+  body {
+    height: auto !important;
+    overflow: visible !important;
+  }
+}
+
+.no-print {
+  @media print {
+    display: none !important;
+  }
+}

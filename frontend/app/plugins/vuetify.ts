@@ -12,65 +12,132 @@ export default defineNuxtPlugin((app) => {
                 light: {
                     dark: false,
                     colors: {
-                        primary: '#0f172a', // Navy/Dark Slate for a premium look
-                        secondary: '#64748b',
-                        accent: '#334155',
-                        error: '#be123c',
-                        warning: '#d97706',
-                        info: '#0ea5e9',
-                        success: '#059669',
-                        background: '#f1f5f9',
-                        surface: '#ffffff'
+                        // Primary: BLACK (Zinc-900)
+                        primary: '#18181b', // zinc-900
+                        'primary-darken-1': '#09090b', // zinc-950
+                        'primary-lighten-1': '#27272a', // zinc-800
+
+                        // Secondary: Violet (accent color)
+                        secondary: '#7c3aed', // violet-600
+                        'secondary-darken-1': '#6d28d9', // violet-700
+                        'secondary-lighten-1': '#8b5cf6', // violet-500
+
+                        // Accent: Indigo
+                        accent: '#4f46e5', // indigo-600
+
+                        // Semantic colors
+                        error: '#ef4444', // red-500
+                        warning: '#f59e0b', // amber-500
+                        info: '#3b82f6', // blue-500
+                        success: '#10b981', // emerald-500
+
+                        // Backgrounds - Zinc palette
+                        background: '#fafafa', // zinc-50
+                        surface: '#ffffff',
+                        'surface-variant': '#f4f4f5', // zinc-100
+
+                        // Text colors
+                        'on-background': '#18181b', // zinc-900
+                        'on-surface': '#18181b', // zinc-900
+                        'on-primary': '#ffffff',
+                        'on-secondary': '#ffffff'
                     }
                 },
                 dark: {
                     dark: true,
                     colors: {
-                        primary: '#f8fafc',
-                        secondary: '#94a3b8',
-                        accent: '#e2e8f0',
-                        error: '#fb7185',
-                        warning: '#fbbf24',
-                        info: '#38bdf8',
-                        success: '#34d399',
-                        background: '#020617',
-                        surface: '#0f172a'
+                        // Primary: WHITE for dark mode
+                        primary: '#fafafa', // zinc-50
+                        'primary-darken-1': '#f4f4f5', // zinc-100
+                        'primary-lighten-1': '#ffffff',
+
+                        // Secondary: Lighter violet for dark mode
+                        secondary: '#a78bfa', // violet-400
+                        'secondary-darken-1': '#8b5cf6', // violet-500
+                        'secondary-lighten-1': '#c4b5fd', // violet-300
+
+                        // Accent
+                        accent: '#818cf8', // indigo-400
+
+                        // Semantic colors (brighter for dark mode)
+                        error: '#f87171', // red-400
+                        warning: '#fbbf24', // amber-400
+                        info: '#60a5fa', // blue-400
+                        success: '#34d399', // emerald-400
+
+                        // Backgrounds - Zinc dark palette
+                        background: '#18181b', // zinc-900
+                        surface: '#27272a', // zinc-800
+                        'surface-variant': '#3f3f46', // zinc-700
+
+                        // Text colors
+                        'on-background': '#fafafa', // zinc-50
+                        'on-surface': '#fafafa', // zinc-50
+                        'on-primary': '#18181b',
+                        'on-secondary': '#18181b'
                     }
                 }
             }
         },
         defaults: {
+            global: {
+                density: 'compact'
+            },
             VCard: {
-                rounded: '0',
-                elevation: 0,
-                border: true
+                rounded: 'lg',
+                elevation: 1
             },
             VBtn: {
-                rounded: '0',
+                rounded: 'lg',
                 variant: 'flat',
                 elevation: 0
             },
             VTextField: {
                 variant: 'outlined',
-                density: 'comfortable',
-                rounded: '0'
+                density: 'compact',
+                rounded: 'lg'
             },
             VSelect: {
                 variant: 'outlined',
-                density: 'comfortable',
-                rounded: '0'
+                density: 'compact',
+                rounded: 'lg'
+            },
+            VAutocomplete: {
+                variant: 'outlined',
+                density: 'compact',
+                rounded: 'lg'
+            },
+            VTextarea: {
+                variant: 'outlined',
+                density: 'compact',
+                rounded: 'lg'
             },
             VDataTable: {
-                hover: true
+                hover: true,
+                density: 'compact'
             },
             VList: {
-                rounded: '0'
+                density: 'compact',
+                rounded: 'lg'
+            },
+            VListItem: {
+                rounded: 'lg'
             },
             VSheet: {
-                rounded: '0'
+                rounded: 'lg'
             },
             VAvatar: {
-                rounded: '0'
+                rounded: 'lg'
+            },
+            VChip: {
+                rounded: 'lg',
+                size: 'small'
+            },
+            VDialog: {
+                maxWidth: '600'
+            },
+            VNavigationDrawer: {
+                width: 260
             }
         }
     })

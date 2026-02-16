@@ -770,3 +770,132 @@ export const useDashboard = () => {
         getUpcomingAppointments
     }
 }
+
+// Composable per le operazioni sulle auto in vendita
+export const useCarsForSale = () => {
+    const client = useSupabaseClient()
+    const loading = ref(false)
+    const error = ref<string | null>(null)
+
+    const fetchCars = async (filters?: { status?: string; search?: string }) => {
+        loading.value = true
+        error.value = null
+        try {
+            let query = client
+                .from('cars_for_sale')
+                .select('*')
+                .order('created_at', { ascending: false })
+
+            if (filters?.status && filters.status !== 'all') {
+                query = query.eq('status', filters.status)
+            }
+
+            if (filters?.search) {
+                query = query.or(`brand.ilike.%${filters.search}%,model.ilike.%${filters.search}%,trim.ilike.%${filters.search}%`)
+            }
+
+            const { data, error: err } = await query
+            if (err) throw err
+            return data
+        } catch (e: any) {
+            error.value = e.message
+            return []
+        } finally {
+            loading.value = false
+        }
+    }
+
+    const getCar = async (id: string) => {
+        const { data, error: err } = await client
+            .from('cars_for_sale')
+            .select('*')
+            .eq('id', id)
+            .single()
+
+        if (err) throw err
+        return data
+    }
+
+    const createCar = async (carData: any) => {
+        const { data, error: err } = await client
+            .from('cars_for_sale')
+            .insert(carData)
+            .select()
+            .single()
+
+        if (err) throw err
+        return data
+    }
+
+    const updateCar = async (id: string, carData: any) => {
+        const { data, error: err } = await client
+            .from('cars_for_sale')
+            .update(carData)
+            .eq('id', id)
+            .select()
+            .single()
+
+        if (err) throw err
+        return data
+    }
+
+    const deleteCar = async (id: string) => {
+        const { error: err } = await client
+            .from('cars_for_sale')
+            .delete()
+            .eq('id', id)
+
+        if (err) throw err
+    }
+
+    const updateCarStatus = async (id: string, status: string) => {
+        return updateCar(id, { status })
+    }
+
+    const uploadCarImage = async (carId: string, file: File) => {
+        const fileExt = file.name.split('.').pop()
+        const uniqueName = `${crypto.randomUUID()}.${fileExt}`
+        const filePath = `${carId}/${uniqueName}`
+
+        const { data, error: err } = await client.storage
+            .from('car-images')
+            .upload(filePath, file, {
+                cacheControl: '3600',
+                upsert: false
+            })
+
+        if (err) throw err
+
+        const { data: urlData } = client.storage
+            .from('car-images')
+            .getPublicUrl(data.path)
+
+        return urlData.publicUrl
+    }
+
+    const deleteCarImage = async (imageUrl: string) => {
+        // Extract path from the public URL
+        const match = imageUrl.match(/car-images\/(.+)$/)
+        if (!match) return
+
+        const filePath = match[1]
+        const { error: err } = await client.storage
+            .from('car-images')
+            .remove([filePath])
+
+        if (err) throw err
+    }
+
+    return {
+        loading,
+        error,
+        fetchCars,
+        getCar,
+        createCar,
+        updateCar,
+        deleteCar,
+        updateCarStatus,
+        uploadCarImage,
+        deleteCarImage
+    }
+}

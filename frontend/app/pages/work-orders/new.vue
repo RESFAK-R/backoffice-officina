@@ -80,7 +80,7 @@
                 <!-- Mileage at Entry -->
                 <v-col cols="12" md="6">
                   <v-text-field
-                    v-model.number="formData.mileage_in"
+                    v-model.number="formData.entry_mileage"
                     type="number"
                     label="Chilometraggio Ingresso"
                     suffix="km"
@@ -154,67 +154,72 @@
                 </v-btn>
               </div>
 
-              <v-table v-else density="compact">
-                <thead>
-                  <tr>
-                    <th style="width: 50%">Descrizione</th>
-                    <th>Tipo</th>
-                    <th class="text-right">Qtà</th>
-                    <th class="text-right">Prezzo</th>
-                    <th class="text-right">Totale</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="(item, index) in workItems" :key="index">
-                    <td>
+              <div v-else>
+                <v-card
+                  v-for="(item, index) in workItems"
+                  :key="index"
+                  variant="outlined"
+                  class="mb-3 pa-3"
+                >
+                  <div class="d-flex align-center justify-space-between mb-2">
+                    <v-chip size="small" :color="item.item_type === 'labor' ? 'primary' : 'orange'" label>
+                      {{ getItemTypeLabel(item.item_type) }}
+                    </v-chip>
+                    <v-btn icon="mdi-delete" variant="text" size="small" color="error" @click="removeWorkItem(index)" />
+                  </div>
+                  <v-row dense>
+                    <v-col cols="12">
                       <v-text-field
                         v-model="item.description"
-                        density="compact"
+                        label="Descrizione"
                         variant="outlined"
+                        density="comfortable"
                         hide-details
-                        placeholder="Descrizione..."
                       />
-                    </td>
-                    <td>
+                    </v-col>
+                    <v-col cols="12" sm="4">
                       <v-select
                         v-model="item.item_type"
                         :items="itemTypes"
-                        density="compact"
+                        item-title="title"
+                        item-value="value"
+                        label="Tipo"
                         variant="outlined"
+                        density="comfortable"
                         hide-details
                       />
-                    </td>
-                    <td style="width: 80px">
+                    </v-col>
+                    <v-col cols="6" sm="3">
                       <v-text-field
                         v-model.number="item.quantity"
                         type="number"
-                        density="compact"
+                        label="Quantità"
                         variant="outlined"
+                        density="comfortable"
                         hide-details
                         min="1"
                       />
-                    </td>
-                    <td style="width: 120px">
+                    </v-col>
+                    <v-col cols="6" sm="3">
                       <v-text-field
                         v-model.number="item.unit_price"
                         type="number"
-                        density="compact"
+                        label="Prezzo"
                         variant="outlined"
+                        density="comfortable"
                         hide-details
                         prefix="€"
                         step="0.01"
                       />
-                    </td>
-                    <td class="text-right font-weight-bold" style="width: 100px">
-                      {{ formatCurrency(item.quantity * item.unit_price) }}
-                    </td>
-                    <td style="width: 50px">
-                      <v-btn icon="mdi-delete" variant="text" size="small" color="error" @click="removeWorkItem(index)" />
-                    </td>
-                  </tr>
-                </tbody>
-              </v-table>
+                    </v-col>
+                    <v-col cols="12" sm="2" class="d-flex align-center justify-end">
+                      <span class="text-body-1 font-weight-bold">
+                        {{ formatCurrency(item.quantity * item.unit_price) }}
+                      </span>
+                    </v-col>
+                  </v-row>
+                </v-card>
+              </div>
             </v-card-text>
           </v-card>
 
@@ -322,14 +327,14 @@ const valid = ref(false)
 const saving = ref(false)
 const loadingVehicles = ref(true)
 const vehicles = ref<any[]>([])
-const isEdit = computed(() => route.params.id && !route.path.endsWith('/new'))
-const orderId = computed(() => route.params.id as string)
+const isEdit = computed(() => !!route.query.edit)
+const orderId = computed(() => route.query.edit as string)
 
 const formData = ref({
   vehicle_id: '',
   entry_date: new Date().toISOString().split('T')[0],
   estimated_completion: null as string | null,
-  mileage_in: null as number | null,
+  entry_mileage: null as number | null,
   priority: 'normal',
   status: 'pending',
   problem_description: '',
@@ -359,7 +364,17 @@ const priorities = [
   { title: 'Bassa', value: 'low' }
 ]
 
-const itemTypes = ['Manodopera', 'Ricambio', 'Materiale', 'Altro']
+const itemTypes = [
+  { title: 'Manodopera', value: 'labor' },
+  { title: 'Ricambio', value: 'part' },
+  { title: 'Materiale', value: 'material' },
+  { title: 'Altro', value: 'other' }
+]
+
+const getItemTypeLabel = (value: string) => {
+  const found = itemTypes.find(t => t.value === value)
+  return found ? found.title : value
+}
 
 // Computed
 const vehiclesForSelect = computed(() => {
@@ -379,13 +394,13 @@ const selectedVehicle = computed(() => {
 
 const subtotalLabor = computed(() => {
   return workItems.value
-    .filter(i => i.item_type === 'Manodopera')
+    .filter(i => i.item_type === 'labor')
     .reduce((sum, i) => sum + (i.quantity * i.unit_price), 0)
 })
 
 const subtotalParts = computed(() => {
   return workItems.value
-    .filter(i => i.item_type !== 'Manodopera')
+    .filter(i => i.item_type !== 'labor')
     .reduce((sum, i) => sum + (i.quantity * i.unit_price), 0)
 })
 
@@ -404,7 +419,7 @@ const formatCurrency = (amount: number) => {
 const addWorkItem = () => {
   workItems.value.push({
     description: '',
-    item_type: 'Manodopera',
+    item_type: 'labor',
     quantity: 1,
     unit_price: 0
   })
@@ -436,7 +451,7 @@ onMounted(async () => {
           vehicle_id: order.vehicle_id,
           entry_date: order.entry_date,
           estimated_completion: order.estimated_completion,
-          mileage_in: order.mileage_in,
+          entry_mileage: order.entry_mileage,
           priority: order.priority,
           status: order.status,
           problem_description: order.problem_description,
@@ -472,22 +487,78 @@ const submitForm = async (print = false) => {
   try {
     const orderData = {
       ...formData.value,
-      total_amount: totalAmount.value,
-      labor_cost: subtotalLabor.value,
-      parts_cost: subtotalParts.value
+      labor_total: subtotalLabor.value,
+      parts_total: subtotalParts.value,
+      subtotal: subtotal.value,
+      vat_amount: vatAmount.value,
+      total_amount: totalAmount.value
     }
     
     if (isEdit.value) {
       await updateWorkOrder(orderId.value, orderData as WorkOrderUpdate)
+
+      // Update work items: delete existing, then re-insert
+      const client = useSupabaseClient()
+      await client
+        .from('work_order_items')
+        .delete()
+        .eq('work_order_id', orderId.value)
+
+      if (workItems.value.length > 0) {
+        const itemsToInsert = workItems.value
+          .filter(item => item.description.trim())
+          .map(item => ({
+            work_order_id: orderId.value,
+            description: item.description,
+            item_type: item.item_type,
+            quantity: item.quantity,
+            unit_price: item.unit_price,
+            total_price: item.quantity * item.unit_price
+          }))
+
+        if (itemsToInsert.length > 0) {
+          await client
+            .from('work_order_items')
+            .insert(itemsToInsert)
+        }
+      }
+
       showSnackbar('Ordine aggiornato con successo', 'success')
-      router.push('/work-orders')
+      router.push(`/work-orders/${orderId.value}`)
     } else {
       const newOrder = await createWorkOrder(orderData as WorkOrderInsert)
+
+      // Save work items
+      if (workItems.value.length > 0) {
+        const client = useSupabaseClient()
+        const itemsToInsert = workItems.value
+          .filter(item => item.description.trim())
+          .map(item => ({
+            work_order_id: newOrder.id,
+            description: item.description,
+            item_type: item.item_type,
+            quantity: item.quantity,
+            unit_price: item.unit_price,
+            total_price: item.quantity * item.unit_price
+          }))
+
+        if (itemsToInsert.length > 0) {
+          const { error: itemsError } = await client
+            .from('work_order_items')
+            .insert(itemsToInsert)
+
+          if (itemsError) {
+            console.error('Error saving work items:', itemsError)
+          }
+        }
+      }
+
       showSnackbar('Ordine creato con successo', 'success')
       if (print) {
-        window.open(`/work-orders/${newOrder.id}/print`, '_blank')
+        router.push({ path: `/work-orders/${newOrder.id}`, query: { print: '1' } })
+      } else {
+        router.push(`/work-orders/${newOrder.id}`)
       }
-      router.push(`/work-orders/${newOrder.id}`)
     }
   } catch (error: any) {
     showSnackbar(error.message || 'Errore durante il salvataggio', 'error')
