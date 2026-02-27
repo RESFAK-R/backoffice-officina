@@ -12,11 +12,11 @@
     >
       <!-- Logo Section -->
       <div class="sidebar-logo">
-        <v-icon size="24" color="white">mdi-car-wrench</v-icon>
-        <span v-show="!rail || isMobile" class="logo-text">Officina Pro</span>
+        <img src="/LOGOGGFINALE_NOSFONDO.png" alt="G&G Auto" class="sidebar-logo-img" :style="{ width: rail && !isMobile ? '32px' : '36px', height: 'auto' }" />
+        <span v-show="!rail || isMobile" class="logo-text">G&G Auto</span>
       </div>
 
-      <v-divider class="my-1 mx-2" style="border-color: rgba(255,255,255,0.1)" />
+      <v-divider class="my-1 mx-2" style="border-color: #e4e4e7" />
 
       <!-- Navigation Menu -->
       <v-list nav density="compact" class="px-2">
@@ -412,8 +412,8 @@ const logout = async () => {
 <style lang="scss" scoped>
 // Sidebar
 .sidebar {
-  background: #18181b !important;
-  border-right: none !important;
+  background: #ffffff !important;
+  border-right: 1px solid #e4e4e7 !important;
 }
 
 .sidebar-logo {
@@ -424,44 +424,50 @@ const logout = async () => {
   min-height: 48px;
 }
 
+.sidebar-logo-img {
+  border-radius: 6px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
 .logo-text {
   font-size: 1rem;
   font-weight: 700;
-  color: white;
+  color: #18181b;
   white-space: nowrap;
 }
 
 .nav-item {
-  color: rgba(255, 255, 255, 0.6) !important;
+  color: #71717a !important;
   
   :deep(.v-list-item__prepend) {
-    color: rgba(255, 255, 255, 0.6);
+    color: #71717a;
   }
   
   &:hover {
-    background: rgba(255, 255, 255, 0.08) !important;
-    color: white !important;
+    background: #f4f4f5 !important;
+    color: #18181b !important;
     
     :deep(.v-list-item__prepend) {
-      color: white;
+      color: #18181b;
     }
   }
   
   &.v-list-item--active {
-    background: rgba(255, 255, 255, 0.12) !important;
-    color: white !important;
+    background: rgba(204, 0, 0, 0.08) !important;
+    color: #cc0000 !important;
     
     :deep(.v-list-item__prepend) {
-      color: white;
+      color: #cc0000;
     }
   }
 }
 
 .collapse-btn {
-  color: rgba(255, 255, 255, 0.5) !important;
+  color: #a1a1aa !important;
   
   &:hover {
-    color: white !important;
+    color: #18181b !important;
   }
 }
 
@@ -486,7 +492,7 @@ const logout = async () => {
 
 // Main Content
 .main-area {
-  background: #fafafa;
+  background: #f4f4f5;
   min-height: 100vh;
 }
 </style>

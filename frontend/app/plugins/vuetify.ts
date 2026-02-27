@@ -17,13 +17,13 @@ export default defineNuxtPlugin((app) => {
                         'primary-darken-1': '#09090b', // zinc-950
                         'primary-lighten-1': '#27272a', // zinc-800
 
-                        // Secondary: Violet (accent color)
-                        secondary: '#7c3aed', // violet-600
-                        'secondary-darken-1': '#6d28d9', // violet-700
-                        'secondary-lighten-1': '#8b5cf6', // violet-500
+                        // Secondary: Red (G&G Auto)
+                        secondary: '#cc0000', // red-brand
+                        'secondary-darken-1': '#990000',
+                        'secondary-lighten-1': '#ff3333',
 
-                        // Accent: Indigo
-                        accent: '#4f46e5', // indigo-600
+                        // Accent: Red
+                        accent: '#e60000',
 
                         // Semantic colors
                         error: '#ef4444', // red-500
@@ -51,13 +51,13 @@ export default defineNuxtPlugin((app) => {
                         'primary-darken-1': '#f4f4f5', // zinc-100
                         'primary-lighten-1': '#ffffff',
 
-                        // Secondary: Lighter violet for dark mode
-                        secondary: '#a78bfa', // violet-400
-                        'secondary-darken-1': '#8b5cf6', // violet-500
-                        'secondary-lighten-1': '#c4b5fd', // violet-300
+                        // Secondary: Lighter red for dark mode
+                        secondary: '#ff4d4d',
+                        'secondary-darken-1': '#cc0000',
+                        'secondary-lighten-1': '#ff8080',
 
                         // Accent
-                        accent: '#818cf8', // indigo-400
+                        accent: '#ff3333',
 
                         // Semantic colors (brighter for dark mode)
                         error: '#f87171', // red-400

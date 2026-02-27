@@ -266,7 +266,7 @@ const getFuelColor = (fuel: string) => {
   const colors: Record<string, string> = {
     gasoline: 'orange',
     diesel: 'brown',
-    lpg: 'purple',
+    lpg: 'deep-orange',
     methane: 'teal',
     hybrid: 'blue',
     electric: 'green'

@@ -8,7 +8,7 @@
 // Global app configuration
 useHead({
   titleTemplate: (titleChunk) => {
-    return titleChunk ? `${titleChunk} | Officina Pro` : 'Officina Pro - Gestione Officina'
+    return titleChunk ? `${titleChunk} | G&G Auto` : 'G&G Auto - Compravendita & Officina'
   },
   link: [
     { rel: 'preconnect', href: 'https://fonts.googleapis.com' },

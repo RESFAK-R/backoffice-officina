@@ -30,7 +30,7 @@
           </v-badge>
         </v-tab>
         <v-tab value="waiting_parts">
-          <v-badge :content="statusCounts.waiting_parts" color="purple" inline>
+          <v-badge :content="statusCounts.waiting_parts" color="deep-orange" inline>
             Attesa Ricambi
           </v-badge>
         </v-tab>
@@ -346,7 +346,7 @@ const getStatusColor = (status: string) => {
   const colors: Record<string, string> = {
     pending: 'warning',
     in_progress: 'primary',
-    waiting_parts: 'purple',
+    waiting_parts: 'deep-orange',
     completed: 'success',
     cancelled: 'error'
   }

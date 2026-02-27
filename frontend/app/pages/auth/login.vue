@@ -7,7 +7,7 @@
             <!-- Logo & Title -->
             <div class="text-center mb-6">
               <v-icon size="48" color="primary" class="mb-3">mdi-car-wrench</v-icon>
-              <h1 class="text-h5 font-weight-bold">Officina Pro</h1>
+              <h1 class="text-h5 font-weight-bold">G&G Auto</h1>
               <p class="text-body-2 text-medium-emphasis mt-1">Accedi al tuo account</p>
             </div>
 

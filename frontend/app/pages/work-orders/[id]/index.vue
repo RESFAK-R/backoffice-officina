@@ -465,7 +465,7 @@ const getStatusColor = (status: string) => {
   const colors: Record<string, string> = {
     pending: 'warning',
     in_progress: 'primary',
-    waiting_parts: 'purple',
+    waiting_parts: 'deep-orange',
     completed: 'success',
     cancelled: 'error'
   }

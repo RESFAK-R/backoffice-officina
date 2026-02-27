@@ -342,7 +342,7 @@ const formatCurrency = (amount: number) => {
 }
 
 const getAvatarColor = (index: number) => {
-  const colors = ['primary', 'success', 'warning', 'info', 'purple']
+  const colors = ['primary', 'success', 'warning', 'info', 'deep-orange']
   return colors[index % colors.length]
 }
 
@@ -672,7 +672,7 @@ const loadRecentActivity = async () => {
       const statusColors: Record<string, string> = {
         pending: 'warning',
         in_progress: 'primary',
-        waiting_parts: 'purple',
+        waiting_parts: 'deep-orange',
         completed: 'success',
         cancelled: 'error'
       }

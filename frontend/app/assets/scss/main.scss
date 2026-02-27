@@ -1,6 +1,6 @@
 // ========================================
 // OFFICINA MANAGEMENT SYSTEM - MAIN STYLES
-// Vuetify + SCSS with Violet/Indigo Theme
+// G&G Auto Brand Theme (Black + Red)
 // ========================================
 
 // ========================
@@ -8,16 +8,16 @@
 // ========================
 $primary-black: #18181b; // zinc-900
 $primary-dark: #09090b; // zinc-950
-$accent-violet: #7c3aed; // violet-600
-$accent-indigo: #4f46e5;
-$violet-400: #a78bfa;
-$violet-500: #8b5cf6;
-$violet-600: #7c3aed;
-$violet-700: #6d28d9;
+$accent-red: #cc0000; // brand red
+$accent-red-dark: #991b1b;
+$red-400: #f87171;
+$red-500: #ef4444;
+$red-600: #cc0000;
+$red-700: #991b1b;
 
-$indigo-400: #818cf8;
-$indigo-500: #6366f1;
-$indigo-600: #4f46e5;
+$red-light-400: #fca5a5;
+$red-light-500: #f87171;
+$red-light-600: #ef4444;
 
 // Zinc neutral palette
 $zinc-50: #fafafa;
@@ -117,12 +117,12 @@ p {
 }
 
 a {
-  color: $violet-600;
+  color: $red-600;
   text-decoration: none;
   transition: color $transition-fast;
 
   &:hover {
-    color: $violet-700;
+    color: $red-700;
   }
 }
 
@@ -197,8 +197,8 @@ a {
   transition: all $transition-normal;
 
   &:hover {
-    border-color: $violet-400;
-    box-shadow: 0 4px 12px rgba($violet-600, 0.1);
+    border-color: $red-400;
+    box-shadow: 0 4px 12px rgba($red-600, 0.1);
   }
 
   &.success {
@@ -218,7 +218,7 @@ a {
   }
 
   &.primary {
-    border-top: 3px solid $violet-600;
+    border-top: 3px solid $red-600;
   }
 }
 
@@ -230,7 +230,7 @@ a {
 
   .v-icon {
     font-size: 2rem;
-    color: $violet-600;
+    color: $red-600;
   }
 }
 
@@ -283,12 +283,12 @@ a {
   color: $zinc-600;
 
   &:hover {
-    border-color: $violet-500;
-    background: rgba($violet-600, 0.05);
-    color: $violet-700;
+    border-color: $red-500;
+    background: rgba($red-600, 0.05);
+    color: $red-700;
 
     .quick-action-icon {
-      color: $violet-600;
+      color: $red-600;
     }
   }
 }
@@ -351,22 +351,22 @@ a {
 
 // Chips with gradient for primary
 .v-chip--variant-flat.bg-primary {
-  background: linear-gradient(135deg, $violet-600, $indigo-600) !important;
+  background: $primary-black !important;
 }
 
-// Buttons gradient hover effect
+// Buttons flat primary style
 .v-btn--variant-flat.bg-primary {
-  background: linear-gradient(135deg, $violet-600, $indigo-600) !important;
+  background: $primary-black !important;
 
   &:hover {
-    background: linear-gradient(135deg, $violet-700, $indigo-600) !important;
+    background: $primary-dark !important;
   }
 }
 
 // List items active state
 .v-list-item--active {
   .v-list-item__prepend .v-icon {
-    color: $violet-600 !important;
+    color: $red-600 !important;
   }
 }
 
@@ -374,14 +374,14 @@ a {
 // Utility Classes
 // ========================
 .text-gradient {
-  background: linear-gradient(135deg, $violet-600, $indigo-600);
+  background: linear-gradient(135deg, $red-600, $accent-red-dark);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .bg-gradient-primary {
-  background: linear-gradient(135deg, $violet-600, $indigo-600);
+  background: linear-gradient(135deg, $red-600, $accent-red-dark);
 }
 
 // ========================
