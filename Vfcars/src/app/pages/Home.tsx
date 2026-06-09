@@ -30,7 +30,7 @@ export function Home() {
   return (
     <div>
       {/* Hero Section */}
-      <section className="relative h-[600px] flex items-center">
+      <section className="relative min-h-[500px] md:h-[600px] flex items-center py-20 md:py-0">
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: `url(${heroImage})` }}
@@ -39,22 +39,22 @@ export function Home() {
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-          <div className="max-w-2xl">
-            <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
-              Il Tuo Prossimo Viaggio Inizia Qui
+          <div className="max-w-2xl text-left">
+            <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">
+              Il Tuo Prossimo Viaggio <br className="hidden md:block" /> Inizia Qui
             </h1>
-            <p className="text-xl text-white/90 mb-8">
+            <p className="text-lg md:text-xl text-white/90 mb-8 max-w-lg">
               Auto usate certificate, garantite e pronte per la strada. Qualità professionale e trasparenza in ogni dettaglio.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link to="/catalogo">
-                <Button size="lg" className="bg-secondary hover:bg-secondary/90 text-white">
+                <Button size="lg" className="bg-secondary hover:bg-secondary/90 text-white w-full sm:w-auto">
                   Scopri il Catalogo
-                  <ArrowRight className="ml-2 w-5 h-5" />
+                  <ArrowRight className="ml-2 w-5 h-5 transition-transform group-hover:translate-x-1" />
                 </Button>
               </Link>
               <Link to="/contatti">
-                <Button size="lg" variant="outline" className="bg-white hover:bg-white/90 text-primary border-white">
+                <Button size="lg" variant="outline" className="bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/20 text-white w-full sm:w-auto">
                   Contattaci
                 </Button>
               </Link>

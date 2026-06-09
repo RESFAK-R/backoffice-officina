@@ -57,19 +57,19 @@ export function Footer() {
             <h3 className="font-semibold mb-4">Contatti</h3>
             <ul className="space-y-3">
               <li className="flex items-start gap-2 text-sm opacity-80">
-                <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0" />
-                <span>Via Roma 123<br />20100 Milano (MI)</span>
+                <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0 text-secondary" />
+                <span>Via dell'Artigianato 12, 00100 Roma (RM)</span>
               </li>
               <li className="flex items-center gap-2 text-sm opacity-80">
-                <Phone className="w-4 h-4 flex-shrink-0" />
-                <a href="tel:+39123456789" className="hover:text-secondary transition-colors">
-                  +39 123 456 789
+                <Phone className="w-4 h-4 flex-shrink-0 text-secondary" />
+                <a href="tel:+39061234567" className="hover:text-secondary transition-colors">
+                  +39 06 123 4567
                 </a>
               </li>
               <li className="flex items-center gap-2 text-sm opacity-80">
-                <Mail className="w-4 h-4 flex-shrink-0" />
-                <a href="mailto:info@autoselect.it" className="hover:text-secondary transition-colors">
-                  info@autoselect.it
+                <Mail className="w-4 h-4 flex-shrink-0 text-secondary" />
+                <a href="mailto:info@ggauto.it" className="hover:text-secondary transition-colors">
+                  info@ggauto.it
                 </a>
               </li>
             </ul>
